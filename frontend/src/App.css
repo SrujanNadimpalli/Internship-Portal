@@ -1,0 +1,11 @@
+/* styles/app.css */
+.button-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin-top: 20px; /* Adjust spacing as needed */
+}
+
+.button-container button {
+  margin: 0 10px; /* Space between buttons */
+}
