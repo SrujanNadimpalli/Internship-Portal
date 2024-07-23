@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -11,8 +11,31 @@ import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import Logo from '../images/Charusat-logo.png';
-import useStyles from '../styles/Header';
 import { FormControl, InputLabel, Select } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  headerOptions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  button: {
+    margin: theme.spacing(1),
+    flexGrow: 1,
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    flexGrow: 1,
+  },
+}));
 
 const Header = (props) => {
   const { history } = props;
@@ -60,24 +83,21 @@ const Header = (props) => {
 
   return (
     <div className={classes.root}>
-      <AppBar color='transparent' position='static'>
+      <AppBar color="transparent" position="static">
         <Toolbar>
-          <Typography className={classes.logo}>
-            <img src={Logo} alt='Logo' />
-          </Typography>
           {isMobile ? (
             <>
               <IconButton
-                edge='end'
+                edge="end"
                 className={classes.menuButton}
-                color='inherit'
-                aria-label='menu'
+                color="inherit"
+                aria-label="menu"
                 onClick={handleMenu}
               >
                 <MenuIcon />
               </IconButton>
               <Menu
-                id='menu-appbar'
+                id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
                   vertical: 'top',
@@ -108,74 +128,56 @@ const Header = (props) => {
             <div className={classes.headerOptions}>
               <Button
                 className={classes.button}
-                color='inherit'
-                onClick={() => handleButtonClick('/')}
+                color="inherit"
+                onClick={() => handleButtonClick("/")}
               >
                 Home
               </Button>
               <Button
                 className={classes.button}
-                color='inherit'
-                onClick={() => handleButtonClick('/internship')}
+                color="inherit"
+                onClick={() => handleButtonClick("/internship")}
               >
                 Opportunity
               </Button>
               <Button
                 className={classes.button}
-                color='inherit'
-                onClick={() => handleButtonClick('/contact')}
+                color="inherit"
+                onClick={() => handleButtonClick("/contact")}
               >
                 Contact
               </Button>
-
-              {/* <Button
-                  className={classes.authButton}
-                  color="secondary"
-                  variant="contained"
-                  onClick={() => handleButtonClick("/login")}
-                >
-                  Login
-                </Button> */}
-              {/* <Button
-              className={classes.authButton}
-              color="secondary"
-                variant="contained"
-                onClick={() => handleButtonClick("/signup")}
-              >
-                Signup
-              </Button> */}
+  
               <FormControl
-                color='secondary'
-                variant='outlined'
-                className={classes.formControl}
+                color="secondary"
+                variant="outlined"
+                className={`${classes.formControl}`}
               >
                 <InputLabel>Login</InputLabel>
-                <Select autoWidth label='Login'>
-                  <MenuItem onClick={() => handleButtonClick('/studentlogin')}>
+                <Select autoWidth label="Login">
+                  <MenuItem onClick={() => handleButtonClick("/studentlogin")}>
                     As a Student
                   </MenuItem>
-                  <MenuItem onClick={() => handleButtonClick('/employeelogin')}>
-                    As a Employer
+                  <MenuItem onClick={() => handleButtonClick("/employeelogin")}>
+                    As an Employer
                   </MenuItem>
                 </Select>
               </FormControl>
-
+  
               <FormControl
-                color='secondary'
-                variant='outlined'
-                className={classes.formControl}
+                color="secondary"
+                variant="outlined"
+                className={`${classes.formControl} `}
               >
-                <InputLabel id='demo-simple-select-outlined-label'>
+                <InputLabel id="demo-simple-select-outlined-label">
                   Register
                 </InputLabel>
-                <Select autoWidth label='Register'>
-                  <MenuItem onClick={() => handleButtonClick('/studentsignup')}>
+                <Select autoWidth label="Register">
+                  <MenuItem onClick={() => handleButtonClick("/studentsignup")}>
                     As a Student
                   </MenuItem>
-                  <MenuItem
-                    onClick={() => handleButtonClick('/employeesignup')}
-                  >
-                    As a Employer
+                  <MenuItem onClick={() => handleButtonClick("/employeesignup")}>
+                    As an Employer
                   </MenuItem>
                 </Select>
               </FormControl>
@@ -188,35 +190,3 @@ const Header = (props) => {
 };
 
 export default withRouter(Header);
-
-/* import React from 'react'
-import {AppBar, Button, Toolbar, Typography} from '@material-ui/core'
-import { useStyles } from '../styles/Header'
-import Logo from '../images/Charusat-logo.png'
-import {Link} from 'react-router-dom'
-
-const Header = () => {
-
-    const classes = useStyles()
-
-    return (
-        <div className={classes.root}>
-            <AppBar color='inherit' position="sticky" lg={12} md={12} sm={12} xs={12}>
-                <Toolbar variant="dense">
-                    <Typography><img src={Logo} /></Typography>
-
-                    <div className={classes.headerOptions}>
-                   <Button color="inherit" className={classes.title}>Home</Button>
-                    <Button color="inherit" className={classes.title}>Internships</Button>
-                    <Button color="inherit" className={classes.title}>Projects</Button>
-                    <Button color="inherit" className={classes.title}>Contact</Button>
-                    <Button color="inherit">Login</Button>
-                    <Button color="inherit">Signup</Button>
-                    </div>
-                </Toolbar>
-            </AppBar>
-        </div>
-    )
-}
-
-export default Header */

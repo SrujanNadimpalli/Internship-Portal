@@ -23,7 +23,7 @@ export const register = asyncHandler(async (req, res) => {
     const newUser = new User({
       username,
       email,
-      passwordHash,
+      password: passwordHash,  // Ensure this matches your model's field name
     });
 
     let user = await newUser.save();
@@ -57,25 +57,37 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const existingUser = await User.findOne({ email });
+    if (!existingUser) throw new Error('User not found');
 
-    if (existingUser && existingUser.matchPassword(password)) {
-      let token = jwt.sign({ user: existingUser._id }, process.env.JWT_SECRET);
+    // Debug logs
+    //console.log('User found:', existingUser);
+    
 
-      res
-        .cookie('token', token, {
-          maxAge: 90000,
-          httpOnly: true,
-        })
-        .json({
-          _id: existingUser._id,
-          username: existingUser.username,
-          email: existingUser.email,
-          profile: existingUser.profile,
-        });
-    } else {
-      throw new Error('Invalid email or password');
-    }
+    const isPasswordValid = await bcrypt.compare(existingUser.password,password);
+    console.log(isPasswordValid)
+    if (!isPasswordValid) throw new Error('Invalid email or password');
+
+    // Debug log
+    console.log('Password is valid');
+
+    const token = jwt.sign({ user: existingUser._id }, process.env.JWT_SECRET);
+
+    // Debug log
+    console.log('Token generated:', token);
+
+    res
+      .cookie('token', token, {
+        maxAge: 90000,
+        httpOnly: true,
+      })
+      .json({
+        _id: existingUser._id,
+        username: existingUser.username,
+        email: existingUser.email,
+        profile: existingUser.profile,
+      });
   } catch (error) {
     res.status(500).json({ error: error.message, stack: error.stack });
   }
@@ -96,10 +108,8 @@ export const logout = asyncHandler((req, res) => {
 
 // For protecting private routes
 export const loggedIn = asyncHandler((req, res) => {
-  console.log(`Hello ${req.cookies.tokens}`);
   try {
     let token = req.cookies.token;
-    // console.log(token);
     if (!token) return res.json(false);
 
     jwt.verify(token, process.env.JWT_SECRET);
@@ -128,8 +138,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
         },
       }
     );
-
-    // console.log(updatedProfile);
 
     res.status(200).json({
       _id: updatedProfile._id,

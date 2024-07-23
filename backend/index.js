@@ -22,10 +22,11 @@ app.use(
 );
 
 // set up routes
+connectDB();
 app.use('/user', userRouter);
 app.use('/employee', employeeRouter);
 app.use('/jobs', jobRouter);
-connectDB();
+
 
 // Server running
 const PORT = process.env.PORT || 5000;
